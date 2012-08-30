@@ -2,6 +2,10 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 	<head>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+        <title>Current GPS Position</title>
+
 		<style type="text/css">
 			#map_canvas {
 				margin: 0;
@@ -18,61 +22,78 @@
 		
 		<script type="text/javascript">
 
-			google.maps.event.addDomListener(window, 'load', mapLoaded);
-			var canvas = null;
-			var map = null;
-            var currentMarker = null;
-			
-			function mapLoaded() {
-				var myOptions = {
-					zoom: 8,
-					center: new google.maps.LatLng(-34.397, 150.644),
-					disableDefaultUI: false,
-					mapTypeId: google.maps.MapTypeId.ROADMAP
-				};
+		    var JT = { GPS: {} };
+		    JT.GPS.Display = (function ($) {
+		        'use strict';
 
-				canvas = document.getElementById('map_canvas');
-				map = new google.maps.Map(canvas, myOptions);
-			}
+		        var exports = {
+		            init: function () {
+		                this.map = null;
+		                this.currentMarker = null;
 
-			$(document).ready(function () {
-			    $.ajax({
-			        url: "http://localhost:183/CurrentGpsCoordinates",
-			        dataType: 'json',
-			        data: {},
-			        success: function (data) {
-			            if (data != null) {
-			                var loc = new google.maps.LatLng(data.Latitude, data.Longitude);
-			                setCenter(loc);
-			                addMarker(loc, data.Latitude + ", " + data.Longitude);
-			            }
-			        },
-			        error: function (jqXHR, textStatus, errorThrown) {
-			        },
-			        complete: function () {
-			        }
-			    });
-			});
+		                google.maps.event.addDomListener(window, 'load', JT.GPS.Display.mapLoaded);
+		                this.canvas = null;
+		                this.map = null;
+		            },
 
-            function addMarker(location, title) {
-                if (currentMarker != null) {
-                    currentMarker.setMap(null);
-                }
+		            addMarker: function (location, title) {
+		                if (JT.GPS.Display.currentMarker != null) {
+		                    JT.GPS.Display.currentMarker.setMap(null);
+		                }
 
-                if (map != null) {
-                    currentMarker = new google.maps.Marker({
-                        position: location,
-                        map: map,
-                        title: title
-                    });
-                }
-            }
+		                if (JT.GPS.Display.map != null) {
+		                    JT.GPS.Display.currentMarker = new google.maps.Marker({
+		                        position: location,
+		                        map: JT.GPS.Display.map,
+		                        title: title
+		                    });
+		                }
+		            },
 
-            function setCenter(location) {
-                if (map != null) {
-                    map.setCenter(location);
-                }
-            }
+		            setCenter: function (location) {
+		                if (JT.GPS.Display.map != null) {
+		                    JT.GPS.Display.map.setCenter(location);
+		                }
+		            },
+
+		            mapLoaded: function () {
+		                var mapOptions = {
+		                    zoom: 8,
+		                    center: new google.maps.LatLng(-34.397, 150.644),
+		                    disableDefaultUI: false,
+		                    mapTypeId: google.maps.MapTypeId.ROADMAP
+		                };
+
+		                JT.GPS.Display.canvas = document.getElementById('map_canvas');
+		                JT.GPS.Display.map = new google.maps.Map(JT.GPS.Display.canvas, mapOptions);
+
+		                setInterval("JT.GPS.Display.refreshCurrentGpsPosition();", 5000);
+		            },
+
+		            refreshCurrentGpsPosition: function () {
+		                $.ajax({
+		                    url: "http://localhost:183/CurrentGpsCoordinates",
+		                    dataType: 'json',
+		                    data: {},
+		                    success: function (data) {
+		                        if (data != null) {
+		                            var loc = new google.maps.LatLng(data.Latitude, data.Longitude);
+		                            JT.GPS.Display.setCenter(loc);
+		                            JT.GPS.Display.addMarker(loc, data.Latitude + ", " + data.Longitude);
+		                        }
+		                    },
+		                    error: function (jqXHR, textStatus, errorThrown) {
+		                    },
+		                    complete: function () {
+		                    }
+		                });
+		            }
+		        };
+
+		        return exports;
+		    })(jQuery);
+
+		    JT.GPS.Display.init();
 		</script>
 	</head>
 	
