@@ -15,7 +15,8 @@ namespace JeromeTerry.GpsDemo.Nmea
     ///     [0, 0]          $
     ///     [1, 2]          Talker ID
     ///     [3, 5]          Sentence ID
-    ///     [6, n-4]        data fields (CSV)
+    ///     [6, 6]          ,
+    ///     [7, n-4]        data fields (CSV)
     ///     [n-3, n-3]      *
     ///     [n-2, n-1]      checksum
     /// 
@@ -23,7 +24,8 @@ namespace JeromeTerry.GpsDemo.Nmea
     ///     [0, 0]          $
     ///     [1, 2]          Talker ID
     ///     [3, 5]          Sentence ID
-    ///     [6, n-1]        data fields (CSV)
+    ///     [6, 6]          ,
+    ///     [7, n-1]        data fields (CSV)
     /// </summary>
     public class NmeaSentence
     {
@@ -39,6 +41,18 @@ namespace JeromeTerry.GpsDemo.Nmea
 
         public NmeaSentence()
         {
+        }
+
+        public NmeaSentence(NmeaSentence sentence)
+        {
+            this.Sentence = sentence.Sentence;
+            this.Valid = sentence.Valid;
+            this.TalkerId = sentence.TalkerId;
+            this.SentenceId = sentence.SentenceId;
+            this.HasChecksum = sentence.HasChecksum;
+            this.Checksum = sentence.Checksum;
+            this.Fields = sentence.Fields;
+            this.FieldCount = sentence.FieldCount;
         }
 
         public NmeaSentence(string sentence)
@@ -71,7 +85,7 @@ namespace JeromeTerry.GpsDemo.Nmea
 
             string checksum = null;
 
-            int dataFieldStart = 6;
+            int dataFieldStart = 7;
             int dataFieldEnd = n - 1;
 
             if (this.HasChecksum)

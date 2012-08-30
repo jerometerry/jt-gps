@@ -69,7 +69,8 @@ namespace JeromeTerry.GpsDemo.Nmea
         public NmeaSentence ParseSentence(string sentence)
         {
             NmeaSentence nmeaSentence = new NmeaSentence(sentence);
-            return nmeaSentence;
+            NmeaSentence stronglyTypedSentence = NmeaSentenceFactory.CreateConcreteSentence(nmeaSentence);
+            return stronglyTypedSentence;
         }
     }
 }
