@@ -26,9 +26,19 @@ namespace JeromeTerry.GpsDemo
             _parser = new NmeaParser();
             _parser.NmeaSentenceReceived += new NmeaSentenceReceivedEventHandler(_parser_NmeaSentenceReceived);
 
-            _portReader = new SerialPortReader("COM1");
+            string[] ports = SerialPortReader.GetAvailablePorts();
+            if (ports != null && ports.Length > 0)
+            {
+                this._comPorts.Items.AddRange(ports);
+                this._comPorts.SelectedIndex = 0;
+            }
+
+            string port = this._comPorts.SelectedItem as string;
+
+            _portReader = new SerialPortReader(port);
             _portReader.DataReceived += new GpsDataReceivedEventHandler(_portReader_DataReceived);
-            _portReader.Start();
+
+            UpdateControls();
         }
 
         void _parser_NmeaSentenceReceived(NmeaSentence sentence)
@@ -50,6 +60,33 @@ namespace JeromeTerry.GpsDemo
         {
             _portReader.Stop();
             _portReader.Dispose();
+        }
+
+        private void _btnStart_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(this._portReader.PortName))
+            {
+                _portReader.PortName = _comPorts.SelectedItem as string;
+                _portReader.Start();
+                UpdateControls();
+            }
+        }
+
+        private void _btnStop_Click(object sender, EventArgs e)
+        {
+            if (_portReader.Open)
+            {
+                _portReader.Stop();
+                UpdateControls();
+            }
+        }
+
+        private void UpdateControls()
+        {
+            bool open = _portReader.Open;
+            _comPorts.Enabled = !open;
+            _btnStart.Enabled = !open;
+            _btnStop.Enabled = open;
         }
     }
 }

@@ -31,6 +31,31 @@ namespace JeromeTerry.GpsDemo.Nmea
             _wait = new AutoResetEvent(false);
         }
 
+        public string PortName
+        {
+            get
+            {
+                return _port.PortName;
+            }
+            set
+            {
+                _port.PortName = value;
+            }
+        }
+
+        public bool Open
+        {
+            get
+            {
+                return _readingData;
+            }
+        }
+
+        public static string[] GetAvailablePorts()
+        {
+            return SerialPort.GetPortNames();
+        }
+
         private void _port_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             _wait.Set();
