@@ -13,9 +13,6 @@ namespace JeromeTerry.GpsDemo.Nmea
         StringBuilder _buffer;
         object _lock = new object();
 
-        public const string CRLF = "\r\n";
-        public static readonly string[] NMEA_DELIMITERS = new string[] { CRLF };
-
         public NmeaParser()
         {
             _buffer = new StringBuilder();
@@ -36,7 +33,7 @@ namespace JeromeTerry.GpsDemo.Nmea
                 // extract the contents of the buffer to a string, then clear it
                 string contents = _buffer.ToString();
 
-                int index = contents.IndexOf(CRLF);
+                int index = contents.IndexOf(Constants.NMEA_CRLF);
                 if (index < 0)
                 {
                     // No CR \ LF sequence found in the buffer. There is only one line in the buffer, potentially a partial line
@@ -46,7 +43,7 @@ namespace JeromeTerry.GpsDemo.Nmea
 
                 // NMEA 0183 sentences begin with $ and end with CR\LF. Split the contents
                 // by CR\LF, and push the last potentially partial sentence back into the buffer
-                string[] sentences = contents.Split(NMEA_DELIMITERS, StringSplitOptions.None);
+                string[] sentences = contents.Split(Constants.NMEA_DELIMITERS, StringSplitOptions.None);
                 if (sentences == null || sentences.Length == 0)
                 {
                     // an error occurred
@@ -64,9 +61,15 @@ namespace JeromeTerry.GpsDemo.Nmea
                 for (int i = 0; i < sentences.Length - 1; i++)
                 {
                     string sentence = sentences[i];
-                    Console.WriteLine(sentence);
+                    ParseSentence(sentence);
                 }
             }
+        }
+
+        public NmeaSentence ParseSentence(string sentence)
+        {
+            NmeaSentence nmeaSentence = new NmeaSentence(sentence);
+            return nmeaSentence;
         }
     }
 }
