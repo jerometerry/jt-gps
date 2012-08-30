@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 	<head>
@@ -37,22 +37,20 @@
 		            },
 
 		            addMarker: function (location, title) {
-		                if (JT.GPS.Display.currentMarker != null) {
-		                    JT.GPS.Display.currentMarker.setMap(null);
-		                }
-
-		                if (JT.GPS.Display.map != null) {
+		                if (JT.GPS.Display.currentMarker == null) {
 		                    JT.GPS.Display.currentMarker = new google.maps.Marker({
 		                        position: location,
-		                        map: JT.GPS.Display.map,
-		                        title: title
+		                        map: JT.GPS.Display.map
 		                    });
+		                }
+		                else {
+		                    JT.GPS.Display.currentMarker.setPosition(location);
 		                }
 		            },
 
 		            setCenter: function (location) {
 		                if (JT.GPS.Display.map != null) {
-		                    JT.GPS.Display.map.setCenter(location);
+		                    JT.GPS.Display.map.panTo(location);
 		                }
 		            },
 
