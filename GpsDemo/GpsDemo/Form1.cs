@@ -23,18 +23,12 @@ namespace JeromeTerry.GpsDemo
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            string dir = Application.StartupPath;
-            string path = System.IO.Path.Combine(dir, "index.html");
-
-            Uri url = new Uri(path, UriKind.Absolute);
-            this.webBrowser1.Url = url;
-
             _parser = new NmeaParser();
             _parser.NmeaSentenceReceived += new NmeaSentenceReceivedEventHandler(_parser_NmeaSentenceReceived);
 
             _portReader = new SerialPortReader("COM1");
             _portReader.DataReceived += new GpsDataReceivedEventHandler(_portReader_DataReceived);
-            _portReader.Start();
+            //_portReader.Start();
         }
 
         void _parser_NmeaSentenceReceived(NmeaSentence sentence)

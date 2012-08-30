@@ -15,7 +15,13 @@ namespace JeromeTerry.GpsDemo
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            WebServer server = new WebServer();
+            server.Start();
+
             Application.Run(new Form1());
+
+            server.Stop();
         }
     }
 }

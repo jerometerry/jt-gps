@@ -17,6 +17,7 @@
 		<script src="http://maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script>
 		
 		<script type="text/javascript">
+
 			google.maps.event.addDomListener(window, 'load', mapLoaded);
 			var canvas = null;
 			var map = null;
@@ -36,10 +37,28 @@
 				canvas = document.getElementById('map_canvas');
 				map = new google.maps.Map(canvas, myOptions);
 			}
+
+			$(document).ready(function () {
+			    $.ajax({
+			        url: "http://localhost:183/CurrentGpsCoordinates",
+			        dataType: 'json',
+			        data: {},
+			        success: function (data) {
+			            alert(data.Latitude + ", " + data.Longitude);
+			        },
+			        error: function (jqXHR, textStatus, errorThrown) {
+			        },
+			        complete: function () {
+			        }
+			    });
+			});
 		</script>
 	</head>
 	
 	<body>
-		<div id="map_canvas"></div>
+		<div id="messageDiv"></div>
+        <div id="map_canvas"></div>
+
+
 	</body>
 </html>
