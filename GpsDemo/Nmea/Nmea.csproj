@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="LatLng.cs" />
     <Compile Include="NmeaGGA.cs" />
     <Compile Include="NmeaGLL.cs" />
     <Compile Include="NmeaParser.cs" />

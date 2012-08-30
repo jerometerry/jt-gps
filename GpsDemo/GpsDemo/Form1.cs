@@ -33,16 +33,10 @@ namespace JeromeTerry.GpsDemo
 
         void _parser_NmeaSentenceReceived(NmeaSentence sentence)
         {
-            Console.WriteLine(sentence.Sentence);
-            if (sentence.HasChecksum)
+            NmeaGLL gll = sentence as NmeaGLL;
+            if (gll != null)
             {
-                Console.WriteLine("Talker ID: {0} Sentence ID: {1} Field Count {2} Checksum: {3}",
-                    sentence.TalkerId, sentence.SentenceId, sentence.FieldCount, sentence.Checksum.ToString("X").PadLeft(2, '0'));
-            }
-            else
-            {
-                Console.WriteLine("Talker ID: {0} Sentence ID: {1} Field Count {2}",
-                    sentence.TalkerId, sentence.SentenceId, sentence.FieldCount);
+                Console.WriteLine("GLL: Lat {0}, Lng {1}", gll.Coordinate.Latitude, gll.Coordinate.Longitude);
             }
         }
 
