@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace JeromeTerry.GpsDemo
+namespace JeromeTerry.GpsDemo.Nmea
 {
     /// <summary>
     /// Simple NMEA 0183 parser for parsing data from a NMEA compliant GPS receiver (e.g. Garmin eTrex)
