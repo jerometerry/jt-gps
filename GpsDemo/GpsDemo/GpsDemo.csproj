@@ -8,8 +8,8 @@
     <ProjectGuid>{655843D1-714D-46AA-8DB1-25008F107845}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>zedIT_GpsDemo</RootNamespace>
-    <AssemblyName>zedIT_GpsDemo</AssemblyName>
+    <RootNamespace>JeromeTerry.GpsDemo</RootNamespace>
+    <AssemblyName>JeromeTerry.GpsDemo</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -67,6 +67,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

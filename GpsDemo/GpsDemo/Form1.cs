@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 
-namespace zedIT_GpsDemo
+namespace JeromeTerry.GpsDemo
 {
     public partial class Form1 : Form
     {

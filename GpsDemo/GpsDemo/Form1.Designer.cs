@@ -1,4 +1,4 @@
-﻿namespace zedIT_GpsDemo
+﻿namespace JeromeTerry.GpsDemo
 {
     partial class Form1
     {

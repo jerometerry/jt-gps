@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace zedIT_GpsDemo
+namespace JeromeTerry.GpsDemo
 {
     static class Program
     {

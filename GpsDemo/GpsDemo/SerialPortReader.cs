@@ -5,16 +5,23 @@ using System.Text;
 using System.IO.Ports;
 using System.Threading;
 
-namespace zedIT_GpsDemo
+namespace JeromeTerry.GpsDemo
 {
     public delegate void GpsDataReceived(string data);
 
+    /// <summary>
+    /// Simple class for reading ASCII characters from a serial port, for use with the NMEA protocol
+    /// </summary>
     public sealed class SerialPortReader : IDisposable
     {
         SerialPort _port;
         private bool _readingData;
         Thread _readThread;
         AutoResetEvent _wait;
+
+        /// <summary>
+        /// Event that is raised when new data is read from the Serial (COM) port
+        /// </summary>
         public event GpsDataReceived DataReceived;
 
         public SerialPortReader(string portNumber)
@@ -24,7 +31,7 @@ namespace zedIT_GpsDemo
             _wait = new AutoResetEvent(false);
         }
 
-        void _port_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        private void _port_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             _wait.Set();
         }
@@ -75,8 +82,11 @@ namespace zedIT_GpsDemo
                     }
                 }
 
-                // Block for 1 second, or until data is received,
-                // which ever occurs first
+                // Block for 1 second, or until data is received, which ever 
+                // occurs first. We could just wait indefinitely, but then the
+                // application would hang on shutdown. At least this way,
+                // the application will only pause for a second until the timeout 
+                // hits.
                 _wait.WaitOne(1000);
             }
         }
