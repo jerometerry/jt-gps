@@ -24,10 +24,26 @@ namespace JeromeTerry.GpsDemo
         private void Form1_Load(object sender, EventArgs e)
         {
             _parser = new NmeaParser();
+            _parser.NmeaSentenceReceived += new NmeaSentenceReceivedEventHandler(_parser_NmeaSentenceReceived);
 
             _portReader = new SerialPortReader("COM1");
-            _portReader.DataReceived += new GpsDataReceived(_portReader_DataReceived);
+            _portReader.DataReceived += new GpsDataReceivedEventHandler(_portReader_DataReceived);
             _portReader.Start();
+        }
+
+        void _parser_NmeaSentenceReceived(NmeaSentence sentence)
+        {
+            Console.WriteLine(sentence.Sentence);
+            if (sentence.HasChecksum)
+            {
+                Console.WriteLine("Talker ID: {0} Sentence ID: {1} Field Count {2} Checksum: {3}",
+                    sentence.TalkerId, sentence.SentenceId, sentence.FieldCount, sentence.Checksum.ToString("X").PadLeft(2, '0'));
+            }
+            else
+            {
+                Console.WriteLine("Talker ID: {0} Sentence ID: {1} Field Count {2}",
+                    sentence.TalkerId, sentence.SentenceId, sentence.FieldCount);
+            }
         }
 
         void _portReader_DataReceived(string data)

@@ -107,18 +107,6 @@ namespace JeromeTerry.GpsDemo.Nmea
                     this.FieldCount = this.Fields.Length;
                 }
             }
-
-            Console.WriteLine(sentence);
-            if (this.HasChecksum)
-            {
-                Console.WriteLine("Talker ID: {0} Sentence ID: {1} Field Count {2} Checksum: {3}",
-                    this.TalkerId, this.SentenceId, this.FieldCount, this.Checksum.ToString("X").PadLeft(2, '0'));
-            }
-            else
-            {
-                Console.WriteLine("Talker ID: {0} Sentence ID: {1} Field Count {2}",
-                    this.TalkerId, this.SentenceId, this.FieldCount);
-            }
         }
     }
 }

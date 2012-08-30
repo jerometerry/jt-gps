@@ -5,9 +5,9 @@ using System.Text;
 using System.IO.Ports;
 using System.Threading;
 
-namespace JeromeTerry.GpsDemo
+namespace JeromeTerry.GpsDemo.Nmea
 {
-    public delegate void GpsDataReceived(string data);
+    public delegate void GpsDataReceivedEventHandler(string data);
 
     /// <summary>
     /// Simple class for reading ASCII characters from a serial port, for use with the NMEA protocol
@@ -22,7 +22,7 @@ namespace JeromeTerry.GpsDemo
         /// <summary>
         /// Event that is raised when new data is read from the Serial (COM) port
         /// </summary>
-        public event GpsDataReceived DataReceived;
+        public event GpsDataReceivedEventHandler DataReceived;
 
         public SerialPortReader(string portNumber)
         {

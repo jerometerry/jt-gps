@@ -5,6 +5,8 @@ using System.Text;
 
 namespace JeromeTerry.GpsDemo.Nmea
 {
+    public delegate void NmeaSentenceReceivedEventHandler(NmeaSentence sentence);
+
     /// <summary>
     /// Simple NMEA 0183 parser for parsing data from a NMEA compliant GPS receiver (e.g. Garmin eTrex)
     /// </summary>
@@ -12,6 +14,7 @@ namespace JeromeTerry.GpsDemo.Nmea
     {
         StringBuilder _buffer;
         object _lock = new object();
+        public event NmeaSentenceReceivedEventHandler NmeaSentenceReceived;
 
         public NmeaParser()
         {
@@ -61,7 +64,11 @@ namespace JeromeTerry.GpsDemo.Nmea
                 for (int i = 0; i < sentences.Length - 1; i++)
                 {
                     string sentence = sentences[i];
-                    ParseSentence(sentence);
+                    NmeaSentence nmeaSentence = ParseSentence(sentence);
+                    if (nmeaSentence != null && this.NmeaSentenceReceived != null)
+                    {
+                        this.NmeaSentenceReceived(nmeaSentence);
+                    }
                 }
             }
         }
