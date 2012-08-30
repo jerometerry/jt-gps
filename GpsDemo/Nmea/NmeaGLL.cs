@@ -24,7 +24,12 @@ namespace JeromeTerry.GpsDemo.Nmea
 
             string lat = sentence.Fields[0];
             string latDir = sentence.Fields[1]; // n or s
-            this.Coordinate.Latitude = decimal.Parse(lat);
+
+            double degMin = double.Parse(lat);
+            int deg = (int)(degMin / 100);
+            double min = degMin - (deg * 100);
+
+            this.Coordinate.Latitude = Convert.ToDecimal(deg) + (Convert.ToDecimal(min) / Convert.ToDecimal(60));
             if (string.Compare(latDir, "s", true) == 0)
             {
                 this.Coordinate.Latitude *= -1;
@@ -32,7 +37,12 @@ namespace JeromeTerry.GpsDemo.Nmea
 
             string lng = sentence.Fields[2];
             string lngDir = sentence.Fields[3]; // e or w
-            this.Coordinate.Longitude = decimal.Parse(lng);
+
+            degMin = double.Parse(lng);
+            deg = (int)(degMin / 1000);
+            min = degMin - (deg * 1000);
+
+            this.Coordinate.Longitude = Convert.ToDecimal(deg) + (Convert.ToDecimal(min) / Convert.ToDecimal(60));
             if (string.Compare(lngDir, "w", true) == 0)
             {
                 this.Coordinate.Longitude *= -1;
