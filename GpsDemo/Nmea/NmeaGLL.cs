@@ -10,7 +10,7 @@ namespace JeromeTerry.GpsDemo.Nmea
     /// </summary>
     public class NmeaGLL : NmeaSentence
     {
-        public LatLng Coordinate { get; set; }
+        public LatLng Coordinates { get; set; }
 
         public NmeaGLL()
         {
@@ -19,8 +19,8 @@ namespace JeromeTerry.GpsDemo.Nmea
         public NmeaGLL(NmeaSentence sentence)
             : base(sentence)
         {
-            this.Coordinate = new LatLng();
-            this.Coordinate.Valid = false;
+            this.Coordinates = new LatLng();
+            this.Coordinates.Valid = false;
 
             string lat = sentence.Fields[0];
             string latDir = sentence.Fields[1]; // n or s
@@ -29,10 +29,10 @@ namespace JeromeTerry.GpsDemo.Nmea
             int deg = (int)(degMin / 100);
             double min = degMin - (deg * 100);
 
-            this.Coordinate.Latitude = Convert.ToDecimal(deg) + (Convert.ToDecimal(min) / Convert.ToDecimal(60));
+            this.Coordinates.Latitude = Convert.ToDecimal(deg) + (Convert.ToDecimal(min) / Convert.ToDecimal(60));
             if (string.Compare(latDir, "s", true) == 0)
             {
-                this.Coordinate.Latitude *= -1;
+                this.Coordinates.Latitude *= -1;
             }
 
             string lng = sentence.Fields[2];
@@ -42,19 +42,19 @@ namespace JeromeTerry.GpsDemo.Nmea
             deg = (int)(degMin / 1000);
             min = degMin - (deg * 1000);
 
-            this.Coordinate.Longitude = Convert.ToDecimal(deg) + (Convert.ToDecimal(min) / Convert.ToDecimal(60));
+            this.Coordinates.Longitude = Convert.ToDecimal(deg) + (Convert.ToDecimal(min) / Convert.ToDecimal(60));
             if (string.Compare(lngDir, "w", true) == 0)
             {
-                this.Coordinate.Longitude *= -1;
+                this.Coordinates.Longitude *= -1;
             }
 
             string utc = sentence.Fields[4];
             string status = sentence.Fields[5];
 
-            this.Coordinate.Valid = false;
+            this.Coordinates.Valid = false;
             if (string.Compare(status, "a", true) == 0)
             {
-                this.Coordinate.Valid = true;
+                this.Coordinates.Valid = true;
             }
         }
     }

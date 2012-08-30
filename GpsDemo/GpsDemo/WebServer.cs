@@ -49,10 +49,7 @@ namespace JeromeTerry.GpsDemo
                 }
                 else if (path.IndexOf("CurrentGpsCoordinates", StringComparison.CurrentCultureIgnoreCase) >= 0)
                 {
-                    LatLng latLng = new LatLng();
-                    latLng.Valid = true;
-                    latLng.Latitude = 47;
-                    latLng.Longitude = -52;
+                    LatLng latLng = CurrentGpsPosition.Value;
 
                     System.Web.Script.Serialization.JavaScriptSerializer exporter =
                         new System.Web.Script.Serialization.JavaScriptSerializer();

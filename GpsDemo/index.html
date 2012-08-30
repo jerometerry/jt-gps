@@ -21,16 +21,13 @@
 			google.maps.event.addDomListener(window, 'load', mapLoaded);
 			var canvas = null;
 			var map = null;
+            var currentMarker = null;
 			
 			function mapLoaded() {
 				var myOptions = {
 					zoom: 8,
 					center: new google.maps.LatLng(-34.397, 150.644),
-					disableDefaultUI: true,
-					zoomControl: true,
-					zoomControlOptions: {
-						style: google.maps.ZoomControlStyle.SMALL
-					},
+					disableDefaultUI: false,
 					mapTypeId: google.maps.MapTypeId.ROADMAP
 				};
 
@@ -44,7 +41,11 @@
 			        dataType: 'json',
 			        data: {},
 			        success: function (data) {
-			            alert(data.Latitude + ", " + data.Longitude);
+			            if (data != null) {
+			                var loc = new google.maps.LatLng(data.Latitude, data.Longitude);
+			                setCenter(loc);
+			                addMarker(loc, data.Latitude + ", " + data.Longitude);
+			            }
 			        },
 			        error: function (jqXHR, textStatus, errorThrown) {
 			        },
@@ -52,6 +53,26 @@
 			        }
 			    });
 			});
+
+            function addMarker(location, title) {
+                if (currentMarker != null) {
+                    currentMarker.setMap(null);
+                }
+
+                if (map != null) {
+                    currentMarker = new google.maps.Marker({
+                        position: location,
+                        map: map,
+                        title: title
+                    });
+                }
+            }
+
+            function setCenter(location) {
+                if (map != null) {
+                    map.setCenter(location);
+                }
+            }
 		</script>
 	</head>
 	

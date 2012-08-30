@@ -28,7 +28,7 @@ namespace JeromeTerry.GpsDemo
 
             _portReader = new SerialPortReader("COM1");
             _portReader.DataReceived += new GpsDataReceivedEventHandler(_portReader_DataReceived);
-            //_portReader.Start();
+            _portReader.Start();
         }
 
         void _parser_NmeaSentenceReceived(NmeaSentence sentence)
@@ -36,7 +36,8 @@ namespace JeromeTerry.GpsDemo
             NmeaGLL gll = sentence as NmeaGLL;
             if (gll != null)
             {
-                Console.WriteLine("GLL: Lat {0}, Lng {1}", gll.Coordinate.Latitude, gll.Coordinate.Longitude);
+                CurrentGpsPosition.Value = new LatLng(gll.Coordinates);
+                Console.WriteLine("GLL: Lat {0}, Lng {1}", gll.Coordinates.Latitude, gll.Coordinates.Longitude);
             }
         }
 
