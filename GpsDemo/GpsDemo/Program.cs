@@ -16,11 +16,14 @@ namespace JeromeTerry.GpsDemo
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            WebServer server = new WebServer();
+            // start the web server on port 183, since we're working with the 
+            // NMEA 0183 protocol :)
+            WebServer server = new WebServer("http://localhost:183/");
             server.Start();
 
             Application.Run(new Form1());
 
+            // stop the web server
             server.Stop();
         }
     }

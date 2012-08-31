@@ -69,6 +69,16 @@ namespace JeromeTerry.GpsDemo.Nmea
         /// <returns>The concrete NmeaSentence class</returns>
         public abstract NmeaSentence Create(NmeaSentence sentence);
 
+        /// <summary>
+        /// Use the factory assigned to the id of the given sentence to construct a 
+        /// concrete implementation of the NmeaSentence class. If no factory is assigned
+        /// to the sentence id, then the sentence is unknown, and the NmeaUnknownFactory
+        /// is used to just return the given sentence
+        /// </summary>
+        /// <param name="sentence">A generic NmeaSentence to create a concrete implementation
+        /// of NmeaSentence for</param>
+        /// <returns>A concrete implementation of NmeaSentence, if the sentence is supported,
+        /// otherwise the given sentence is returned.</returns>
         public static NmeaSentence CreateConcreteSentence(NmeaSentence sentence)
         {
             if (sentence == null)
@@ -82,6 +92,10 @@ namespace JeromeTerry.GpsDemo.Nmea
         }
     }
 
+    /// <summary>
+    /// NmeaUnknownFactory is an NmeaSentenceFactory that just
+    /// returns the generic NmeaSentence in the Create method
+    /// </summary>
     public class NmeaUnknownFactory : NmeaSentenceFactory
     {
         public override NmeaSentence Create(NmeaSentence sentence)
@@ -90,6 +104,9 @@ namespace JeromeTerry.GpsDemo.Nmea
         }
     }
 
+    /// <summary>
+    /// NmeaGllFactory is an NmeaSentenceFactory that creates NmeaGll classes
+    /// </summary>
     public class NmeaGllFactory : NmeaSentenceFactory
     {
         public override NmeaSentence Create(NmeaSentence sentence)
@@ -98,6 +115,9 @@ namespace JeromeTerry.GpsDemo.Nmea
         }
     }
 
+    /// <summary>
+    /// NmeaGllFactory is an NmeaSentenceFactory that creates NmeaGga classes
+    /// </summary>
     public class NmeaGgaFactory : NmeaSentenceFactory
     {
         public override NmeaSentence Create(NmeaSentence sentence)

@@ -11,16 +11,24 @@ using JeromeTerry.GpsDemo.Nmea;
 
 namespace JeromeTerry.GpsDemo
 {
+    /// <summary>
+    /// Form1 is the main Form for the GPS Demo application.
+    /// </summary>
     public partial class Form1 : Form
     {
+        #region Implementation Data
         SerialPortReader _portReader;
         NmeaParser _parser;
+        #endregion
 
+        #region Constructors
         public Form1()
         {
             InitializeComponent();
         }
+        #endregion
 
+        #region Implementation Operations
         private void Form1_Load(object sender, EventArgs e)
         {
             _parser = new NmeaParser();
@@ -41,7 +49,7 @@ namespace JeromeTerry.GpsDemo
             UpdateControls();
         }
 
-        void _parser_NmeaSentenceReceived(NmeaSentence sentence)
+        private void _parser_NmeaSentenceReceived(NmeaSentence sentence)
         {
             NmeaGLL gll = sentence as NmeaGLL;
             if (gll != null)
@@ -51,9 +59,9 @@ namespace JeromeTerry.GpsDemo
             }
         }
 
-        void _portReader_DataReceived(string data)
+        private void _portReader_DataReceived(string data)
         {
-            _parser.AppendData(data);
+            _parser.Append(data);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -88,5 +96,14 @@ namespace JeromeTerry.GpsDemo
             _btnStart.Enabled = !open;
             _btnStop.Enabled = open;
         }
+
+        private void _miExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            Application.Exit();
+        }
+        #endregion
+
+        
     }
 }

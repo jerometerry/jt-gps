@@ -14,23 +14,53 @@ namespace JeromeTerry.GpsDemo.Nmea
     /// </summary>
     public sealed class SerialPortReader : IDisposable
     {
+        #region Implementation Data
+
+        /// <summary>
+        /// The SerialPort object that will handing reading data for us
+        /// </summary>
         SerialPort _port;
+
+        /// <summary>
+        /// Control value used to terminate the receive thread gracefully
+        /// </summary>
         private bool _readingData;
+        
+        /// <summary>
+        /// The receive thread
+        /// </summary>
         Thread _readThread;
+
+        /// <summary>
+        /// AutoResetEvent used to block until data is available on the COM port.
+        /// Use of the AutoResetEvent to block is lest of a waste of CPU than 
+        /// just doing Thread.Sleep.
+        /// </summary>
         AutoResetEvent _wait;
 
         /// <summary>
         /// Event that is raised when new data is read from the Serial (COM) port
         /// </summary>
         public event GpsDataReceivedEventHandler DataReceived;
+        #endregion
 
+        #region Constructors
+        /// <summary>
+        /// Constructs a new SerialPortReader
+        /// </summary>
+        /// <param name="portNumber">The COM port name to read from</param>
         public SerialPortReader(string portNumber)
         {
             _port = new SerialPort(portNumber, 4800, Parity.None, 8, StopBits.One);
             _port.DataReceived += new SerialDataReceivedEventHandler(_port_DataReceived);
             _wait = new AutoResetEvent(false);
         }
+        #endregion
 
+        #region Operations (SerialPortReader)
+        /// <summary>
+        /// Get / set the COM port name to read from
+        /// </summary>
         public string PortName
         {
             get
@@ -43,6 +73,9 @@ namespace JeromeTerry.GpsDemo.Nmea
             }
         }
 
+        /// <summary>
+        /// Get whether the current serial port is open or not
+        /// </summary>
         public bool Open
         {
             get
@@ -51,16 +84,18 @@ namespace JeromeTerry.GpsDemo.Nmea
             }
         }
 
+        /// <summary>
+        /// Get the list of available COM ports
+        /// </summary>
+        /// <returns></returns>
         public static string[] GetAvailablePorts()
         {
             return SerialPort.GetPortNames();
         }
 
-        private void _port_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            _wait.Set();
-        }
-
+        /// <summary>
+        /// Open the selected COM port and start reading data
+        /// </summary>
         public void Start()
         {
             if (_readingData == true)
@@ -76,12 +111,31 @@ namespace JeromeTerry.GpsDemo.Nmea
             _readThread.Start();
         }
 
+        /// <summary>
+        /// Close the selected COM port and stop reading data
+        /// </summary>
         public void Stop()
         {
             _readingData = false;
             _port.Close();
         }
+        #endregion
 
+        #region Implementation Operations
+        /// <summary>
+        /// Callback method that notifies us that data is available in the incoming buffer
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _port_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            _wait.Set();
+        }
+
+        /// <summary>
+        /// Thread procedure to read incoming data, and fire the DataReceived event handler
+        /// when new data is received
+        /// </summary>
         private void ReadGpsData()
         {
             byte[] buffer = new byte[_port.ReadBufferSize];
@@ -115,6 +169,7 @@ namespace JeromeTerry.GpsDemo.Nmea
                 _wait.WaitOne(1000);
             }
         }
+        #endregion
 
         #region IDisposable Members
 

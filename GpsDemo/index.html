@@ -56,8 +56,8 @@
 
 		            mapLoaded: function () {
 		                var mapOptions = {
-		                    zoom: 8,
-		                    center: new google.maps.LatLng(-34.397, 150.644),
+		                    zoom: 4,
+		                    center: new google.maps.LatLng(0, 0),
 		                    disableDefaultUI: false,
 		                    mapTypeId: google.maps.MapTypeId.ROADMAP
 		                };
@@ -70,7 +70,7 @@
 
 		            refreshCurrentGpsPosition: function () {
 		                $.ajax({
-		                    url: "http://localhost:183/CurrentGpsCoordinates",
+		                    url: "/CurrentGpsCoordinates",
 		                    dataType: 'json',
 		                    data: {},
 		                    success: function (data) {

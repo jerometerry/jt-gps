@@ -29,6 +29,7 @@ namespace JeromeTerry.GpsDemo.Nmea
     /// </summary>
     public class NmeaSentence
     {
+        #region Properties
         public string Sentence { get; set; }
         public bool Valid { get; set; }
         public string TalkerId { get; set; }
@@ -38,11 +39,20 @@ namespace JeromeTerry.GpsDemo.Nmea
         
         public string[] Fields { get; set; }
         public int FieldCount { get; set; }
+        #endregion
 
+        #region Constructors
+        /// <summary>
+        /// Constructs an empty NmeaSentence
+        /// </summary>
         public NmeaSentence()
         {
         }
 
+        /// <summary>
+        /// Copies an NmeaSentence
+        /// </summary>
+        /// <param name="sentence">The NmeaSentence to copy</param>
         public NmeaSentence(NmeaSentence sentence)
         {
             this.Sentence = sentence.Sentence;
@@ -55,6 +65,13 @@ namespace JeromeTerry.GpsDemo.Nmea
             this.FieldCount = sentence.FieldCount;
         }
 
+        /// <summary>
+        /// Creates an NmeaSentence by parsing the sentence into a generic NmeaSentence
+        /// (Talker ID, Sentence ID, list of fields, and a checksum).
+        /// </summary>
+        /// <param name="sentence"></param>
+        /// <remarks>None of the fields are actually parsed. It is up to a concrete
+        /// instance of NmeaSentence specific to the sentence ID to parse these fields</remarks>
         public NmeaSentence(string sentence)
         {
             this.Valid = false;
@@ -108,5 +125,6 @@ namespace JeromeTerry.GpsDemo.Nmea
                 }
             }
         }
+        #endregion
     }
 }
