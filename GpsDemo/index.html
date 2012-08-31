@@ -2,7 +2,7 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 	<head>
-        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
 
         <title>Current GPS Position</title>
 
@@ -12,6 +12,12 @@
 				padding: 0;
 				width: 800px;
 				height: 600px;
+				margin-right: auto;
+				margin-left: auto;
+			}
+			
+			#messageDiv {
+				width: 800px;
 				margin-right: auto;
 				margin-left: auto;
 			}
@@ -30,6 +36,7 @@
 		            init: function () {
 		                this.map = null;
 		                this.currentMarker = null;
+		                this.fixRequests = 0;
 
 		                google.maps.event.addDomListener(window, 'load', JT.GPS.Display.mapLoaded);
 		                this.canvas = null;
@@ -49,7 +56,7 @@
 		            },
 
 		            setCenter: function (location) {
-		                if (JT.GPS.Display.map != null) {
+		                if (JT.GPS.Display.map != null && location != null) {
 		                    JT.GPS.Display.map.panTo(location);
 		                }
 		            },
@@ -57,7 +64,7 @@
 		            mapLoaded: function () {
 		                var mapOptions = {
 		                    zoom: 4,
-		                    center: new google.maps.LatLng(0, 0),
+		                    center: new google.maps.LatLng(47.54064, -52.842283),
 		                    disableDefaultUI: false,
 		                    mapTypeId: google.maps.MapTypeId.ROADMAP
 		                };
@@ -69,18 +76,30 @@
 		            },
 
 		            refreshCurrentGpsPosition: function () {
+		                var $div = $("#messageDiv");
+		                $div.empty();
+
+		                JT.GPS.Display.fixRequests++;
 		                $.ajax({
-		                    url: "/CurrentGpsCoordinates",
-		                    dataType: 'json',
+		                    url: "http://localhost:183/CurrentGpsCoordinates",
+		                    cache: false,
+                            dataType: 'html',
 		                    data: {},
 		                    success: function (data) {
-		                        if (data != null) {
-		                            var loc = new google.maps.LatLng(data.Latitude, data.Longitude);
+		                        var fix = $.parseJSON(data);
+		                        if (fix != null) {
+		                            var loc = new google.maps.LatLng(fix.Latitude, fix.Longitude);
 		                            JT.GPS.Display.setCenter(loc);
-		                            JT.GPS.Display.addMarker(loc, data.Latitude + ", " + data.Longitude);
+		                            var markerTitle = fix.Latitude + ", " + fix.Longitude;
+		                            JT.GPS.Display.addMarker(loc, markerTitle);
+		                        }
+		                        else {
 		                        }
 		                    },
 		                    error: function (jqXHR, textStatus, errorThrown) {
+		                        $div.append(textStatus);
+		                        $div.append(": ");
+		                        $div.append(errorThrown);
 		                    },
 		                    complete: function () {
 		                    }
@@ -96,9 +115,7 @@
 	</head>
 	
 	<body>
-		<div id="messageDiv"></div>
         <div id="map_canvas"></div>
-
-
+        <div id="messageDiv" align="center"></div>
 	</body>
 </html>

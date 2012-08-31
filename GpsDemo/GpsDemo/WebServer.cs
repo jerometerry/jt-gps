@@ -25,6 +25,7 @@ namespace JeromeTerry.GpsDemo
         #region Implementation Data
         private HttpListener _listener;
         private bool _listening = false;
+        private readonly ManualResetEvent _stop;
         #endregion
 
         #region Constructors
@@ -36,6 +37,7 @@ namespace JeromeTerry.GpsDemo
         {
             _listener = new HttpListener();
             _listener.Prefixes.Add(prefix);
+            _stop = new ManualResetEvent(false);
         }
         #endregion
 
@@ -49,6 +51,7 @@ namespace JeromeTerry.GpsDemo
 
             _listening = true;
             Thread thread = new Thread(new ThreadStart(Listen));
+            thread.Name = "Web Server Thread";
             thread.Start();
 
         }
@@ -58,8 +61,8 @@ namespace JeromeTerry.GpsDemo
         /// </summary>
         public void Stop()
         {
+            _stop.Set();
             _listening = false;
-            _listener.Stop();
         }
         #endregion
 
@@ -69,13 +72,25 @@ namespace JeromeTerry.GpsDemo
         /// </summary>
         private void Listen()
         {
-            while (_listening)
+            try
             {
-                IAsyncResult result = _listener.BeginGetContext(new AsyncCallback(ListenerCallback), _listener);
-                result.AsyncWaitHandle.WaitOne();
-            }
+                while (_listening)
+                {
+                    IAsyncResult result = _listener.BeginGetContext(new AsyncCallback(ListenerCallback), _listener);
 
-            _listener.Close();
+                    WaitHandle[] handles = new[] { _stop, result.AsyncWaitHandle };
+                    int handleIndex = WaitHandle.WaitAny(handles);
+                    if (handleIndex == 0)
+                    {
+                        // _stop received a signal
+                        return;
+                    }
+                }
+            }
+            finally
+            {
+                _listener.Close();
+            }
         }
 
         /// <summary>
@@ -86,6 +101,22 @@ namespace JeromeTerry.GpsDemo
         {
             try
             {
+                if (_listening == false)
+                {
+                    // The server has stopped?
+                    return;
+                }
+
+                if (_listener == null)
+                {
+                    return;
+                }
+
+                if (_listener.IsListening == false)
+                {
+                    return;
+                }
+
                 HttpListenerContext context = _listener.EndGetContext(result);
                 Uri url = context.Request.Url;
                 System.IO.Stream stream = context.Response.OutputStream;
@@ -162,7 +193,9 @@ namespace JeromeTerry.GpsDemo
 
             System.Web.Script.Serialization.JavaScriptSerializer exporter =
                 new System.Web.Script.Serialization.JavaScriptSerializer();
-            return exporter.Serialize(latLng);
+            
+            string json = exporter.Serialize(latLng);
+            return json;
         }
 
         /// <summary>
