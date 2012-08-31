@@ -38,6 +38,8 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._miExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._miHelpIndex = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -98,7 +100,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(930, 24);
@@ -116,9 +119,24 @@
             // _miExit
             // 
             this._miExit.Name = "_miExit";
-            this._miExit.Size = new System.Drawing.Size(152, 22);
+            this._miExit.Size = new System.Drawing.Size(92, 22);
             this._miExit.Text = "E&xit";
             this._miExit.Click += new System.EventHandler(this._miExit_Click);
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this._miHelpIndex});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Text = "&Help";
+            // 
+            // _miHelpIndex
+            // 
+            this._miHelpIndex.Name = "_miHelpIndex";
+            this._miHelpIndex.Size = new System.Drawing.Size(152, 22);
+            this._miHelpIndex.Text = "&Index";
+            this._miHelpIndex.Click += new System.EventHandler(this._miHelpIndex_Click);
             // 
             // Form1
             // 
@@ -154,6 +172,8 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem _miExit;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem _miHelpIndex;
 
     }
 }

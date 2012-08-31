@@ -102,8 +102,12 @@ namespace JeromeTerry.GpsDemo
             this.Close();
             Application.Exit();
         }
-        #endregion
 
-        
+        private void _miHelpIndex_Click(object sender, EventArgs e)
+        {
+            HelpDialog dlg = new HelpDialog();
+            dlg.ShowDialog();
+        }
+        #endregion
     }
 }
